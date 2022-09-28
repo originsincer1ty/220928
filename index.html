@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="서울과학기술대학교 웹인터페이스디자인2 3주차 과제입니다.">
+    <meta name="author" content="Seong Kim">
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="https://use.typekit.net/wbw4xiv.css">
+	<title>Watch out for chestnut trees</title>
+</head>
+<style type="text/css">
+
+	html {
+			text-align: center;
+			font-size: 16pt;
+		}
+
+	nav {
+			top: 0;
+			z-index: 100;
+			position: fixed;
+			overflow: hidden;
+			background-color: transparent;
+			width: 100%;
+			height: 4.7rem;
+			margin-top: 1rem;
+			color: black;
+			/*fonts*/
+			font-family: kepler-std, serif;
+			font-weight: 300;
+			font-style: normal;
+			font-size: 2.4rem;
+			line-height: 2.5rem;
+		}
+
+
+	section {
+		text-align: center;
+		justify-content: center;
+		font-size: 0.8rem;
+		margin: 1rem;
+		}
+
+
+	footer {
+		font-size: 0.8rem;
+		padding: 3rem;
+	}
+
+	p {
+		color: white;
+	}
+
+	.bam { 
+		width: 200px;
+		height: 200px;
+		position: absolute;
+		background-image: url(bam.png);
+		background-size: contain;
+
+		/*animation keyframe*/
+		animation-name: fade, fall;
+		animation-duration: 10s, 2s;
+		animation-delay: 0s, 8s;
+  		animation-timing-function: ease-in-out;
+  		animation-fill-mode: forwards, forwards;
+
+		}
+
+	@keyframes fade {
+  	  	5% { transform: rotateZ(0deg); }
+  	  	10% { transform: rotateZ(20deg); }
+    	11% { transform: rotateZ(0deg); }
+    	13% { transform: rotateZ(-20deg); }
+    	15% { transform: rotateZ(0deg); }
+    	90% { opacity: 1; }
+    	100% { opacity: 0; transform: rotateZ(0deg); }
+
+    }
+
+    @keyframes fall {
+    	95% { top: 800px; }
+    }
+
+	
+	
+	#tree {
+		width: 800px;
+		height: 400px;
+		background-color: transparent;
+		display: inline-block;
+		}
+
+	#ground {
+		width: 1200px;
+		height: 1000px;
+		background-image: url(tree.jpg);
+		background-size: contain;
+		display: inline-block;
+	}
+
+	.button {
+		display: flex;
+		background-color: red;
+		width: 160px;
+		height: 50px;
+		justify-content: center;
+		align-items: center;
+
+	}
+
+	:link {
+	text-decoration: none;
+	color: white;
+	}
+
+</style>
+
+<body>
+
+	<nav>
+		<p style="color: black;"> pick count </p>
+		<p id='result' onclick="increase()" style="color: black;">
+			0
+		</p>
+	</nav>
+
+	<section>
+		<div id="ground">
+			<div id="tree">
+			</div>
+		</div>
+	</section>
+
+		<section>
+		Watch out for chestnut trees
+		<p style="color: black;"> 다빈치관 옆 밤나무를 조심하세요 </p>
+	</section>
+
+
+	<section style ="display: flex;">
+		<div class ="button" style = " width : 300px;">
+			<p>
+				밤 맞기 좋은 시간 &ensp;
+			</p>
+			<p id ="hourDiv">
+				0
+			</p>
+			<p>
+				시 &nbsp;
+
+
+			</p>
+			<p id ="minuteDiv">
+				0
+			</p>
+			<p>
+				분 &nbsp;
+			</p>
+
+			<p id = "secondDiv">
+				0
+			</p>
+			<p>
+				초 &nbsp;
+			</p>
+		</div>
+		<div style="width: 20px;">
+
+		</div>
+		<div class = "button">
+			<a href="javascript:makeBam()">인위적인 밤 조성</a>
+		</div>
+	</section>
+
+
+	<footer>
+		<div class="copyright">
+			2022 서울과학기술대학교 디자인학부 김성은
+		</div>
+	</footer>
+
+
+<script type="text/javascript">
+
+	var myTimer = setInterval(myTimer, 1000);
+	var d = 0;
+	let delay = 1000;
+	var count = 0;
+	var bamCount = document.getElementsByClassName("bam");
+
+	makeBam();
+	autoMake();
+
+		function autoMake() {
+
+			let timerId = setTimeout (
+				function loopMake() {
+  					makeBam();
+ 					timerId = setTimeout(autoMake, delay);
+ 				}, delay
+ 			);
+
+		 	for (var i = 15; i < bamCount.length; i++) {
+    		clearTimeout(timerId);
+			}
+		}
+	
+        function makeBam() {
+
+            const tree = document.getElementById("tree");
+            var a = document.createElement("div");
+           	a.className = "bam";
+           	// a.id = "bam";
+           	var b = Math.random()*tree.clientWidth + 400;
+			var c = Math.random()*tree.clientHeight;
+			a.style.left = b + "px";
+			a.style.top = c + "px";
+
+
+            a.onclick = function removeBam(){
+                p = this.parentElement;
+                tree.removeChild(this);
+                count = count + 1;
+                 document.querySelector("#result").innerText=count;
+                alert("ouch");
+            }
+
+            tree.appendChild(a);
+        }
+
+
+        function myTimer() {
+
+        	const hourElement = document.getElementById('hourDiv');
+			var time = new Date();
+			var h = time.getHours()
+			hourElement.innerHTML = h;
+
+        	const minuteElement = document.getElementById('minuteDiv');
+			var time = new Date();
+			var m = time.getMinutes()
+			minuteElement.innerHTML = m;
+
+			const secondElement = document.getElementById('secondDiv');
+			var time = new Date();
+			var s = time.getSeconds()
+			secondElement.innerHTML = s;
+
+		}
+
+    </script>
+
+</script>
+
+</body>
+
+</html>
